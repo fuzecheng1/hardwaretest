@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">硬件测试</string>
+    <string name="stream_test">流传测试</string>
+    <string name="stress_test" >压力测试</string>
+    <string name="back" >返回</string>
+    <string name="test_type">测试类型</string>
+    <string name="type_stream_reconnect">流接口重连</string>
+    <string name="test_count">测试次数</string>
+    <string name="interval_time">间隔时间</string>
+    <string name="current_time">当前时长</string>
+    <string name="start">开始测试</string>
+    <string name="stop">停止</string>
+    <string name="clear_count">清除数据</string>
+    <string name="preview_test">预览测试</string>
+</resources>

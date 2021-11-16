@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="test_item_base_names">
+        <item>@string/stream_test</item>
+        <item>@string/stress_test</item>
+        <item>@string/preview_test</item>
+    </string-array>
+
+    <string-array name="test_item_base_class_names">
+        <item>com.hollyland.hardwaretest.ui.stream.StreamActivity</item>
+        <item>com.hollyland.hardwaretest.ui.stress.StressActivity</item>
+        <item>com.hollyland.hardwaretest.ui.preview.PreviewActivity</item>
+    </string-array>
+</resources>

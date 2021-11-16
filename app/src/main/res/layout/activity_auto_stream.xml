@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/ll_headerview"
+        layout="@layout/heardview_layout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/conn_type"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/ll_headerview">
+
+        <TextView
+            android:id="@+id/tvType"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="@string/test_type"
+            android:textColor="@android:color/black"
+            android:textSize="12sp" />
+
+        <RadioGroup
+            android:id="@+id/rg_test_type"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/type_stream_reconnect"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:checked="true"
+                android:gravity="center_vertical"
+                android:text="@string/type_stream_reconnect"
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />
+
+<!--            <RadioButton-->
+<!--                android:id="@+id/rb_stress_type_usb"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="1"-->
+<!--                android:gravity="center_vertical"-->
+<!--                android:text="@string/type_usb"-->
+<!--                android:textColor="@android:color/black"-->
+<!--                android:textSize="18sp" />-->
+
+<!--            <RadioButton-->
+<!--                android:id="@+id/type_network"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="1"-->
+<!--                android:gravity="center_vertical"-->
+<!--                android:text="@string/type_network"-->
+<!--                android:textColor="@android:color/black"-->
+<!--                android:textSize="18sp" />-->
+        </RadioGroup>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/devider0"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintTop_toBottomOf="@id/conn_type" />
+
+    <LinearLayout
+        android:id="@+id/ll_settings"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/devider0">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/test_count"
+            android:textColor="@android:color/black"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/et_total_count"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:enabled="false"
+            android:gravity="center"
+            android:inputType="number"
+            android:textSize="12sp"
+            android:maxLines="1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:text="@string/interval_time"
+            android:textColor="@android:color/black"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/et_intervals_time"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLines="1"
+            android:textSize="12sp"
+            android:text="20" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:text="@string/current_time"
+            android:textColor="@android:color/black"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/et_current_time"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:maxLines="1" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/devider1"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintTop_toBottomOf="@id/ll_settings" />
+
+
+    <LinearLayout
+        android:id="@+id/ll_settings1"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/devider1">
+
+<!--        <CheckBox-->
+<!--            android:id="@+id/cb_factoryreset"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:checked="false"-->
+<!--            android:gravity="center"-->
+<!--            android:text="@string/whether_restore_factory"-->
+<!--            android:textSize="18sp" />-->
+
+<!--        <CheckBox-->
+<!--            android:id="@+id/cb_qr_code"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:checked="false"-->
+<!--            android:gravity="center"-->
+<!--            android:text="@string/whether_display_qr_code"-->
+<!--            android:textSize="18sp" />-->
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/devider2"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintTop_toBottomOf="@id/ll_settings1" />
+
+
+
+
+    <TextView
+        android:id="@+id/tv_errror"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:gravity="center_vertical"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toTopOf="@id/ll_bottom" />
+
+    <LinearLayout
+        android:id="@+id/ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginBottom="12dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <Button
+            android:id="@+id/btn_start"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_weight="1"
+            android:text="@string/start"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btn_stop"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_weight="1"
+            android:text="@string/stop"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btn_clear_count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_weight="1"
+            android:text="@string/clear_count"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
