@@ -1,9 +1,9 @@
 pipeline {
   agent any
   stages {
-    stage('test') {
+    stage('build') {
       steps {
-        sh 'echo \'test\''
+        withGradle()
       }
     }
 
