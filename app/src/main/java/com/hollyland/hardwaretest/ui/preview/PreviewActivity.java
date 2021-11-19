@@ -47,7 +47,7 @@ public class PreviewActivity extends BaseActivity {
         //创建 Preview。
         Preview preview = new Preview.Builder().build();
         //**前置摄像头
-        CameraSelector cameraSelector = new CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
+         CameraSelector cameraSelector = new CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
         //将 Preview 连接到 PreviewView。
         preview.setSurfaceProvider(previewView.getSurfaceProvider());
         //将所选相机和任意用例绑定到生命周期

@@ -11,6 +11,8 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                sh 'git config --global http.version HTTP/1.1'
+                sh 'git config --global http.postBuffer 524288000'
                 sh './gradlew assemble'
             }
         }
