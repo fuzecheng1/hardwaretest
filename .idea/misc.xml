@@ -9,7 +9,7 @@
         <entry key="app/src/main/res/drawable/selector_green_button.xml" value="0.1537037037037037" />
         <entry key="app/src/main/res/drawable/shape_green_button_normal.xml" value="0.1537037037037037" />
         <entry key="app/src/main/res/drawable/shape_green_button_pressed.xml" value="0.1537037037037037" />
-        <entry key="app/src/main/res/layout/activity_auto_stream.xml" value="0.15989583333333332" />
+        <entry key="app/src/main/res/layout/activity_auto_stream.xml" value="0.1" />
         <entry key="app/src/main/res/layout/heardview_layout.xml" value="0.234375" />
         <entry key="app/src/main/res/layout/main_activity.xml" value="0.19375" />
         <entry key="app/src/main/res/layout/main_activity_test_item.xml" value="0.13802083333333334" />

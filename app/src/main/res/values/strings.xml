@@ -11,5 +11,6 @@
     <string name="start">start</string>
     <string name="stop">stop</string>
     <string name="clear_count">clear</string>
-    <string name="preview_test">预览测试</string>
+    <string name="preview_test">preview test</string>
+    <string name="type_stream_hold_on">stream hold on</string>
 </resources>

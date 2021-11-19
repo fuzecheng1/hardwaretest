@@ -6,7 +6,6 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -29,7 +28,7 @@ public class StreamActivity extends BaseActivity {
 
 
     @SuppressLint("NonConstantResourceId")
-    @BindView(R.id.type_stream_reconnect)
+    @BindView(R.id.rb_stream_reconnect)
     RadioButton mRbStreamReconnect;
 
 //    @SuppressLint("NonConstantResourceId")
@@ -60,10 +59,14 @@ public class StreamActivity extends BaseActivity {
     }
 
     @SuppressLint("NonConstantResourceId")
-    @OnCheckedChanged({R.id.type_stream_reconnect})
+    @OnCheckedChanged({R.id.rb_stream_reconnect,R.id.rb_stream_hold_on})
     public void onCheckedChanged(CompoundButton compoundButton , boolean isChecked){
         switch (compoundButton.getId()){
-            case R.id.type_stream_reconnect:
+            case R.id.rb_stream_reconnect:
+                if (isChecked){
+
+                }
+            case R.id.rb_stream_hold_on:
                 if (isChecked){
 
                 }

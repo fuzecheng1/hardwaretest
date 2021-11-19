@@ -40,7 +40,7 @@
             android:orientation="horizontal">
 
             <RadioButton
-                android:id="@+id/type_stream_reconnect"
+                android:id="@+id/rb_stream_reconnect"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -50,15 +50,15 @@
                 android:textColor="@android:color/black"
                 android:textSize="12sp" />
 
-<!--            <RadioButton-->
-<!--                android:id="@+id/rb_stress_type_usb"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_weight="1"-->
-<!--                android:gravity="center_vertical"-->
-<!--                android:text="@string/type_usb"-->
-<!--                android:textColor="@android:color/black"-->
-<!--                android:textSize="18sp" />-->
+            <RadioButton
+                android:id="@+id/rb_stream_hold_on"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/type_stream_hold_on"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
 
 <!--            <RadioButton-->
 <!--                android:id="@+id/type_network"-->
