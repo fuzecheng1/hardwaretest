@@ -8,6 +8,11 @@ pipeline {
     environment {
         CI = 'true'
     }
+
+     triggers {
+            gitlab(triggerOnPush: true, triggerOnMergeRequest: false, branchFilterType: 'All')
+        }
+
     stages {
         stage('Build') {
             steps {
