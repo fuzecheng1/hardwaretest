@@ -5,6 +5,10 @@ pipeline {
             args '-p 3000:3000 -p 5000:5000'
         }
     }
+
+    options{
+        timeout(time: 20, unit: 'MINUTES')
+    }
     environment {
         CI = 'true'
     }
