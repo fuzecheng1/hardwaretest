@@ -2,8 +2,30 @@ plugins {
     id 'com.android.application'
 }
 
+
+static def releaseTime() {
+    return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
+}
+
+
 android {
     compileSdk 31
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    signingConfigs {
+        platformRelease {
+            keyAlias 'hollyland'
+            keyPassword '80F92A170B1B4EC7B39662AC5648C56E'
+            storeFile file('..\\sign\\hollyland.jks')
+            storePassword '80F92A170B1B4EC7B39662AC5648C56E'
+        }
+
+        debug {
+        }
+    }
 
     defaultConfig {
         applicationId "com.hollyland.hardwaretest"
@@ -14,18 +36,39 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
-        release {
+
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
+        platformRelease {
+            // 不显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            //混淆
+            minifyEnabled false
+            // 移除无用的resource文件
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.platformRelease
+        }
+
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "HardwareTest" + "_" + buildType.name + "_v" + defaultConfig.versionName + "_${releaseTime()}.apk"
+        }
     }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
 }
+
 
 dependencies {
 
