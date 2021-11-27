@@ -10,7 +10,10 @@
         <entry key="app/src/main/res/drawable/shape_green_button_normal.xml" value="0.1537037037037037" />
         <entry key="app/src/main/res/drawable/shape_green_button_pressed.xml" value="0.1537037037037037" />
         <entry key="app/src/main/res/layout/activity_auto_stream.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_stress.xml" value="0.15579710144927536" />
         <entry key="app/src/main/res/layout/heardview_layout.xml" value="0.234375" />
+        <entry key="app/src/main/res/layout/item_autoreboot_usb.xml" value="0.15579710144927536" />
+        <entry key="app/src/main/res/layout/item_usb_device.xml" value="0.15579710144927536" />
         <entry key="app/src/main/res/layout/main_activity.xml" value="0.19375" />
         <entry key="app/src/main/res/layout/main_activity_test_item.xml" value="0.13802083333333334" />
         <entry key="app/src/main/res/layout/main_layout.xml" value="0.21354166666666666" />

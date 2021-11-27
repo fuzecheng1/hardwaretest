@@ -68,7 +68,9 @@ android {
     }
 
 }
-
+//repositories  {
+//    flatDir{ dirs 'libs'  }
+//}
 
 dependencies {
 
@@ -102,5 +104,7 @@ dependencies {
     // CameraX Lifecycle library
     implementation "androidx.camera:camera-lifecycle:$camerax_version"
 
-
+    implementation 'com.google.code.gson:gson:2.8.8' //okhttp log
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 }

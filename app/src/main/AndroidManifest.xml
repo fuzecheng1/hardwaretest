@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.hollyland.hardwaretest">
+    package="com.hollyland.hardwaretest"
+    android:sharedUserId="android.uid.system">
 
     <uses-feature android:name="android.hardware.camera.any" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -29,7 +30,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.SHUTDOWN" />
-    <uses-permission android:name="com.keruyun.permission.RECEIVE_MOTIONEVENT"/>
+
 
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READPROC" />

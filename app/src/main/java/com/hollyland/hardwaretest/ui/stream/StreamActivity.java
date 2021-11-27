@@ -16,7 +16,7 @@ import androidx.annotation.Nullable;
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.hollyland.hardwaretest.R;
-import com.hollyland.hardwaretest.StreamTask;
+import com.hollyland.hardwaretest.task.StreamTask;
 import com.hollyland.hardwaretest.ui.BaseActivity;
 import com.hollyland.hardwaretest.utils.SystemPropertiesUtils;
 

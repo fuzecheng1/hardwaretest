@@ -14,4 +14,17 @@
     <string name="clear_count">清除数据</string>
     <string name="preview_test">预览测试</string>
     <string name="type_stream_hold_on">持续推流</string>
+    <string name="stess_test">压力测试</string>
+    <string name="rb_stress_type_bt">蓝牙</string>
+    <string name="type_wifi">Wi-FI</string>
+    <string name="type_screen">休眠唤醒</string>
+    <string name="type_usb">USB</string>
+    <string name="type_restart">开关机</string>
+    <string name="stess_device">设备选择</string>
+    <string name="test_device_bind">绑定设备</string>
+    <string name="rb_stress_ws_hollyos">hollyos</string>
+    <string name="rb_stress_ws_settings">设置</string>
+    <string name="http_request">网络请求</string>
+    <string name="cb_stess_usb">usb上电</string>
+    <string name="cb_stress_poweron_startup">自动上电</string>
 </resources>
