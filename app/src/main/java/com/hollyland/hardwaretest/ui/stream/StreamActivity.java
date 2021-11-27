@@ -56,6 +56,7 @@ public class StreamActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        streamTask = new StreamTask();
     }
 
     @SuppressLint("NonConstantResourceId")
