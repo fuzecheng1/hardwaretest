@@ -1,6 +1,6 @@
 package com.hollyland.hardwaretest.entity;
 
-public class StressValueBean {
+public class StressValueItem {
 
 
     public final static int BLUETOOTH_STRESS = 0;
@@ -35,19 +35,19 @@ public class StressValueBean {
     /***
      * 选项
      */
-    private SpinnerBean spinnerBean;
+    private SpinnerItem spinnerItem;
 
     /**
      * 蓝牙连接
      */
 
-    private BlueToothTestBean blueToothTestBean;
+    private BlueToothTestItem blueToothTestItem;
 
 
     /**
      * Wi-fi连接
      */
-    private WifiTestBean wifiTestBean;
+    private WifiTestItem wifiTestItem;
 
     /**
      * 成功次数
@@ -72,7 +72,7 @@ public class StressValueBean {
     private boolean inTesting;
 
 
-    public StressValueBean(int testType, int totalCount, int intervalTime, boolean inTesting) {
+    public StressValueItem(int testType, int totalCount, int intervalTime, boolean inTesting) {
         this.testType = testType;
         this.totalCount = totalCount;
         this.intervalTime = intervalTime;
@@ -112,29 +112,29 @@ public class StressValueBean {
     }
 
 
-    public SpinnerBean getSpinnerBean() {
-        return spinnerBean;
+    public SpinnerItem getSpinnerBean() {
+        return spinnerItem;
     }
 
-    public void setSpinnerBean(SpinnerBean spinnerBean) {
-        this.spinnerBean = spinnerBean;
+    public void setSpinnerBean(SpinnerItem spinnerItem) {
+        this.spinnerItem = spinnerItem;
     }
 
 
-    public BlueToothTestBean getBtBean() {
-        return blueToothTestBean;
+    public BlueToothTestItem getBtBean() {
+        return blueToothTestItem;
     }
 
-    public WifiTestBean getWifiBean() {
-        return wifiTestBean;
+    public WifiTestItem getWifiBean() {
+        return wifiTestItem;
     }
 
-    public void setWifiBean(WifiTestBean wifiTestBean) {
-        this.wifiTestBean = wifiTestBean;
+    public void setWifiBean(WifiTestItem wifiTestItem) {
+        this.wifiTestItem = wifiTestItem;
     }
 
-    public void setBtBean(BlueToothTestBean blueToothTestBean) {
-        this.blueToothTestBean = blueToothTestBean;
+    public void setBtBean(BlueToothTestItem blueToothTestItem) {
+        this.blueToothTestItem = blueToothTestItem;
     }
 
     public int getSuccess() {
@@ -167,9 +167,9 @@ public class StressValueBean {
                 "testType=" + testType +
                 ", totalCount=" + totalCount +
                 ", intervalTime=" + intervalTime +
-                ", spinnerBean=" + spinnerBean +
-                ", blueToothTestBean=" + blueToothTestBean +
-                ", wifiTestBean=" + wifiTestBean +
+                ", spinnerBean=" + spinnerItem +
+                ", blueToothTestBean=" + blueToothTestItem +
+                ", wifiTestBean=" + wifiTestItem +
                 ", success=" + success +
                 ", error=" + error +
                 ", data=" + data +

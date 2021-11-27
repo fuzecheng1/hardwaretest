@@ -1,6 +1,6 @@
 package com.hollyland.hardwaretest.entity;
 
-public class SpinnerBean<T> {
+public class SpinnerItem<T> {
 
     private int id;
 
@@ -12,11 +12,11 @@ public class SpinnerBean<T> {
 
     private T data;
 
-    public SpinnerBean(){
+    public SpinnerItem(){
 
     }
 
-    public SpinnerBean(int id, String name, String desc) {
+    public SpinnerItem(int id, String name, String desc) {
         this.id = id;
         this.name = name;
         this.desc = desc;

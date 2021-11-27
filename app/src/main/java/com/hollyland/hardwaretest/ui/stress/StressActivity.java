@@ -16,7 +16,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -46,12 +45,12 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.hollyland.hardwaretest.R;
 import com.hollyland.hardwaretest.adapter.StressUsbAdapter;
 import com.hollyland.hardwaretest.constants.Constants;
-import com.hollyland.hardwaretest.entity.BlueToothTestBean;
+import com.hollyland.hardwaretest.entity.BlueToothTestItem;
 import com.hollyland.hardwaretest.entity.EventMessage;
-import com.hollyland.hardwaretest.entity.ScreenTest;
-import com.hollyland.hardwaretest.entity.SpinnerBean;
-import com.hollyland.hardwaretest.entity.StressValueBean;
-import com.hollyland.hardwaretest.entity.WifiTestBean;
+import com.hollyland.hardwaretest.entity.ScreenTestItem;
+import com.hollyland.hardwaretest.entity.SpinnerItem;
+import com.hollyland.hardwaretest.entity.StressValueItem;
+import com.hollyland.hardwaretest.entity.WifiTestItem;
 import com.hollyland.hardwaretest.manager.A2DPManager;
 import com.hollyland.hardwaretest.manager.CustomStorageManager;
 import com.hollyland.hardwaretest.receiver.BootCompletedReceiver;
@@ -85,7 +84,7 @@ import okhttp3.Response;
 public class StressActivity extends BaseActivity {
 
 
-    private StressValueBean stressValueBean;
+    private StressValueItem stressValueItem;
 
     @SuppressLint("NonConstantResourceId")
     @BindView(R.id.usb_listview)
@@ -169,7 +168,7 @@ public class StressActivity extends BaseActivity {
 
     private StressUsbAdapter stressUsbAdapter ;
 
-    private ArrayAdapter<SpinnerBean> adapter;
+    private ArrayAdapter<SpinnerItem> adapter;
 
     private A2DPManager btManager;
 
@@ -177,20 +176,20 @@ public class StressActivity extends BaseActivity {
 
     private Timer mTimer;
 
-    private SpinnerBean item;
+    private SpinnerItem item;
 
     private CustomStorageManager customStorageManager;
 
 
-    public List<SpinnerBean> getmTemplateSpinnerList() {
+    public List<SpinnerItem> getmTemplateSpinnerList() {
         return mTemplateSpinnerList;
     }
 
-    public void setmTemplateSpinnerList(List<SpinnerBean> mTemplateSpinnerList) {
+    public void setmTemplateSpinnerList(List<SpinnerItem> mTemplateSpinnerList) {
         this.mTemplateSpinnerList = mTemplateSpinnerList;
     }
 
-    private List<SpinnerBean> mTemplateSpinnerList;
+    private List<SpinnerItem> mTemplateSpinnerList;
 
     private boolean isStop = false;
 
@@ -225,7 +224,7 @@ public class StressActivity extends BaseActivity {
         //初始化sharedPreferences
 //        ComponentName componentName = new ComponentName(Con)
         customStorageManager = CustomStorageManager.getInstance(this);
-        stressValueBean = new StressValueBean(0, 0, 20, false);
+        stressValueItem = new StressValueItem(0, 0, 20, false);
         IntentFilter filter = new IntentFilter();
         filter.addAction(ACTION_USB_ACCESSORY_ATTACHED);
         filter.addAction(ACTION_USB_ACCESSORY_DETACHED);
@@ -258,7 +257,7 @@ public class StressActivity extends BaseActivity {
             if (isHttpRequest) {
                 mCbhttpRequest.setChecked(true);
             }
-            stressValueBean.setTestType(StressValueBean.RESTART_STRESS);
+            stressValueItem.setTestType(StressValueItem.RESTART_STRESS);
             mBtnStart.setEnabled(false);
             tvErrror.setText("开关机正在测试中...." + "\n" + "总次数: " + SPStaticUtils.getInt(Constants.SP.UPDOWN_TOTAL, 0) + "\n" + "已经执行次数: " + SPStaticUtils.getInt(Constants.SP.UPDOWN_RESTART, 0));
             Log.d(Constants.TAG, "重启时间间隔: " + mEtIntervalsTime.getText().toString());
@@ -286,7 +285,7 @@ public class StressActivity extends BaseActivity {
             mSpStressDevice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    item = (SpinnerBean) mSpStressDevice.getSelectedItem();
+                    item = (SpinnerItem) mSpStressDevice.getSelectedItem();
                 }
 
                 @Override
@@ -303,8 +302,8 @@ public class StressActivity extends BaseActivity {
     /**
      * 当测试选项被选择后，初始化设备选项
      */
-    private void initSpinnerView(List<SpinnerBean> spinnerBeans) {
-        adapter = new ArrayAdapter<SpinnerBean>(this, android.R.layout.simple_spinner_dropdown_item, spinnerBeans);
+    private void initSpinnerView(List<SpinnerItem> spinnerItems) {
+        adapter = new ArrayAdapter<SpinnerItem>(this, android.R.layout.simple_spinner_dropdown_item, spinnerItems);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpStressDevice.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -314,18 +313,18 @@ public class StressActivity extends BaseActivity {
     /**
      * 当测试选项被选择后，初始化设备选项
      */
-    private void refreshSpinnerView(List<SpinnerBean> spinnerBeans) {
+    private void refreshSpinnerView(List<SpinnerItem> spinnerItems) {
         if (mTemplateSpinnerList == null) {
             mTemplateSpinnerList = new ArrayList<>();
         }
         if (mTemplateSpinnerList.size() == 0) {
-            initSpinnerView(spinnerBeans);
-            setmTemplateSpinnerList(spinnerBeans);
+            initSpinnerView(spinnerItems);
+            setmTemplateSpinnerList(spinnerItems);
         } else {
-            if (mTemplateSpinnerList.size() + 2 < spinnerBeans.size()) {
+            if (mTemplateSpinnerList.size() + 2 < spinnerItems.size()) {
                 adapter.clear();
-                adapter.addAll(spinnerBeans);
-                setmTemplateSpinnerList(spinnerBeans);
+                adapter.addAll(spinnerItems);
+                setmTemplateSpinnerList(spinnerItems);
                 adapter.notifyDataSetChanged();
                 Log.i(Constants.TAG, "refresh: ");
             }
@@ -351,8 +350,8 @@ public class StressActivity extends BaseActivity {
         switch (buttonView.getId()) {
             case R.id.rb_stress_type_bt:
                 if (isChecked) {
-                    stressValueBean.setTestType(StressValueBean.BLUETOOTH_STRESS);
-                    stressValueBean.setBtBean(new BlueToothTestBean());
+                    stressValueItem.setTestType(StressValueItem.BLUETOOTH_STRESS);
+                    stressValueItem.setBtBean(new BlueToothTestItem());
                     btManager.unBondAllDevice();
                     mCbReopenByUSB.setVisibility(View.GONE);
                     mCbReopenPowerOnStartup.setVisibility(View.GONE);
@@ -365,7 +364,7 @@ public class StressActivity extends BaseActivity {
                 break;
             case R.id.rb_stress_type_wifi:
                 if (isChecked) {
-                    stressValueBean.setTestType(StressValueBean.WIFI_STRESS);
+                    stressValueItem.setTestType(StressValueItem.WIFI_STRESS);
                     mCbReopenByUSB.setVisibility(View.GONE);
                     mCbReopenPowerOnStartup.setVisibility(View.GONE);
                     mRbwsByonOS.setVisibility(View.GONE);
@@ -377,7 +376,7 @@ public class StressActivity extends BaseActivity {
             case R.id.rb_stress_type_screen:
                 if (isChecked) {
                     mEtIntervalsTime.setText("5");
-                    stressValueBean.setTestType(StressValueBean.SCREEN_STRESS);
+                    stressValueItem.setTestType(StressValueItem.SCREEN_STRESS);
                     mCbReopenByUSB.setVisibility(View.GONE);
                     mCbReopenPowerOnStartup.setVisibility(View.GONE);
                     mRbwsByonOS.setVisibility(View.VISIBLE);
@@ -389,8 +388,8 @@ public class StressActivity extends BaseActivity {
                 break;
             case R.id.rb_stress_type_usb:
                 if (isChecked) {
-                    stressValueBean.setTestType(StressValueBean.USB_STRESS);
-                    stressValueBean.setIntervalTime(Integer.parseInt(mEtIntervalsTime.getText().toString()));
+                    stressValueItem.setTestType(StressValueItem.USB_STRESS);
+                    stressValueItem.setIntervalTime(Integer.parseInt(mEtIntervalsTime.getText().toString()));
                     Log.d(Constants.TAG, "onCheckedChange: rb_stress_type_usb");
                     mCbReopenByUSB.setVisibility(View.GONE);
                     mCbReopenPowerOnStartup.setVisibility(View.GONE);
@@ -408,7 +407,7 @@ public class StressActivity extends BaseActivity {
                 break;
             case R.id.rb_stress_type_reopen_device:
                 if (isChecked) {
-                    stressValueBean.setTestType(StressValueBean.RESTART_STRESS);
+                    stressValueItem.setTestType(StressValueItem.RESTART_STRESS);
                     Log.d(Constants.TAG, "onCheckedChange: rb_stress_type_reopen_device");
                     mRbwsByonOS.setVisibility(View.GONE);
                     mRbwsBySettings.setVisibility(View.GONE);
@@ -436,8 +435,8 @@ public class StressActivity extends BaseActivity {
                     ToastUtils.showLong("请输入设备");
                     break;
                 }
-                stressValueBean.setSpinnerBean(item);
-                mEtStressDevice.setText(stressValueBean.getSpinnerBean().getName());
+                stressValueItem.setSpinnerBean(item);
+                mEtStressDevice.setText(stressValueItem.getSpinnerBean().getName());
                 break;
             case R.id.tv_headerview_back://返回
                 finish();
@@ -451,11 +450,11 @@ public class StressActivity extends BaseActivity {
                 int enable = pm.getComponentEnabledSetting(name);
                 Log.d(Constants.TAG, "getComponentEnabledSetting: " + enable);
                 setStop(false);
-                stressValueBean.setInTesting(true);
+                stressValueItem.setInTesting(true);
                 createLogDir();
-                stressValueBean.setIntervalTime(Integer.parseInt(mEtIntervalsTime.getText().toString()));
+                stressValueItem.setIntervalTime(Integer.parseInt(mEtIntervalsTime.getText().toString()));
 
-                if (stressValueBean.getTestType() == StressValueBean.RESTART_STRESS) {
+                if (stressValueItem.getTestType() == StressValueItem.RESTART_STRESS) {
                     if (StringUtils.isBlank(mEtTotalCount.getText())) {
                         ToastUtils.showLong("请输入测试次数");
                         return;
@@ -479,7 +478,7 @@ public class StressActivity extends BaseActivity {
                         shutDown(this, Long.parseLong(mEtIntervalsTime.getText().toString()) * 1000);
                     }
                     return;
-                } else if (stressValueBean.getTestType() == StressValueBean.SCREEN_STRESS) {
+                } else if (stressValueItem.getTestType() == StressValueItem.SCREEN_STRESS) {
 //                    if (mRbwsByonOS.isChecked()) {
 //                        if (!AppUtils.isAppInstalled(Constants.ONOS_PACKAGE_NAME)) {
 //                            ToastUtils.showLong("onOS未安装");
@@ -489,11 +488,11 @@ public class StressActivity extends BaseActivity {
 //                    } else if (mRbwsBySettings.isChecked()) {
 //                        stressValueBean.setData(Constants.SETTINS_PACKAGE_NAME);
 //                    }
-                }else if (stressValueBean.getTestType() == StressValueBean.USB_STRESS){
+                }else if (stressValueItem.getTestType() == StressValueItem.USB_STRESS){
                     isUSBTest = true;
                     List<StorageVolume> checkedVolumes = stressUsbAdapter.getCheckedVolumes();
                     List<String> uuids = checkedVolumes.stream().map(StorageVolume::getUuid).collect(Collectors.toList());
-                    stressValueBean.setData(uuids);
+                    stressValueItem.setData(uuids);
 
                     for (Method declaredMethod : StorageManager.class.getDeclaredMethods()) {
                         Log.d(Constants.TAG, "declaredMethod: " + declaredMethod.getName());
@@ -510,7 +509,7 @@ public class StressActivity extends BaseActivity {
                 }
 
 
-                stressTask = new StressTask(stressValueBean, this);
+                stressTask = new StressTask(stressValueItem, this);
                 ThreadUtils.executeBySingle(stressTask);
                 break;
             case R.id.btn_stop://停止
@@ -557,70 +556,70 @@ public class StressActivity extends BaseActivity {
             mEtCurrentTime.setText(String.valueOf(eventMessage.getData()));
         } else if (eventMessage.getCode() == Constants.EVENT.EVENT_BT_SEARCH_DEVICE_LIST) {
             Set<BluetoothDevice> data = (Set<BluetoothDevice>) eventMessage.getData();
-            List<SpinnerBean> beans = new ArrayList<>();
+            List<SpinnerItem> beans = new ArrayList<>();
             for (BluetoothDevice datum : data) {
-                SpinnerBean spinnerBean = new SpinnerBean();
-                spinnerBean.setName(datum.getName());
-                spinnerBean.setDesc(datum.getAddress());
-                spinnerBean.setData(datum);
-                beans.add(spinnerBean);
+                SpinnerItem spinnerItem = new SpinnerItem();
+                spinnerItem.setName(datum.getName());
+                spinnerItem.setDesc(datum.getAddress());
+                spinnerItem.setData(datum);
+                beans.add(spinnerItem);
             }
             refreshSpinnerView(beans);
         } else if (eventMessage.getCode() == Constants.EVENT_STRESS.STOP_TEST) {
             stop();
         } else if (eventMessage.getCode() == Constants.EVENT.SCREEN_TEST_SLEEP) {
-            ScreenTest screenTest = (ScreenTest) eventMessage.getData();
-            tvErrror.setText("休眠success次数 :" + screenTest.getSleepSuccess() + "\n" +
-                    "休眠error次数 :" + screenTest.getSleepError() + "\n" +
-                    "唤醒success次数 :" + screenTest.getWakeUpSuccess() + "\n" +
-                    "唤醒error次数 :" + screenTest.getWakeUpError() + "\n");
+            ScreenTestItem screenTestItem = (ScreenTestItem) eventMessage.getData();
+            tvErrror.setText("休眠success次数 :" + screenTestItem.getSleepSuccessNum() + "\n" +
+                    "休眠error次数 :" + screenTestItem.getSleepErrorNum() + "\n" +
+                    "唤醒success次数 :" + screenTestItem.getWakeUpSuccessNum() + "\n" +
+                    "唤醒error次数 :" + screenTestItem.getWakeUpErrorNum() + "\n");
         } else if (eventMessage.getCode() == Constants.EVENT.SCREEN_TEST_WAKEUP) {
-            ScreenTest screenTest = (ScreenTest) eventMessage.getData();
-            tvErrror.setText("休眠success次数 :" + screenTest.getSleepSuccess() + "\n" +
-                    "休眠error次数 :" + screenTest.getSleepError() + "\n" +
-                    "唤醒success次数 :" + screenTest.getWakeUpSuccess() + "\n" +
-                    "唤醒error次数 :" + screenTest.getWakeUpError() + "\n");
+            ScreenTestItem screenTestItem = (ScreenTestItem) eventMessage.getData();
+            tvErrror.setText("休眠success次数 :" + screenTestItem.getSleepSuccessNum() + "\n" +
+                    "休眠error次数 :" + screenTestItem.getSleepErrorNum() + "\n" +
+                    "唤醒success次数 :" + screenTestItem.getWakeUpSuccessNum() + "\n" +
+                    "唤醒error次数 :" + screenTestItem.getWakeUpErrorNum() + "\n");
         } else if (eventMessage.getCode() == Constants.EVENT.EVENT_WIFI_STESS_RESULT) {
             StringBuilder builder = new StringBuilder();
-            WifiTestBean wifiTestBean = (WifiTestBean) eventMessage.getData();
-            if (wifiTestBean != null) {
-                builder.append("Wi-fi开启次数:").append(wifiTestBean.getEnableNum()).append("\n")
-                        .append("Wi-fi连接次数:").append(wifiTestBean.getConnectedNum()).append("\n")
-                        .append("Wi-fi上网次数:").append(wifiTestBean.getSufNetNum()).append("\n")
-                        .append("Wi-fi断开次数:").append(wifiTestBean.getDisableNum()).append("\n");
+            WifiTestItem wifiTestItem = (WifiTestItem) eventMessage.getData();
+            if (wifiTestItem != null) {
+                builder.append("Wi-fi开启次数:").append(wifiTestItem.getEnableNum()).append("\n")
+                        .append("Wi-fi连接次数:").append(wifiTestItem.getConnectedNum()).append("\n")
+                        .append("Wi-fi上网次数:").append(wifiTestItem.getSufNetNum()).append("\n")
+                        .append("Wi-fi断开次数:").append(wifiTestItem.getDisableNum()).append("\n");
                 tvErrror.setText(builder);
-                Log.d(Constants.TAG, "onEventMessageByMain: getCurrentNum :" + wifiTestBean.getCurrentNum());
-                mEtTotalCount.setText(wifiTestBean.getCurrentNum() + "");
+                Log.d(Constants.TAG, "onEventMessageByMain: getCurrentNum :" + wifiTestItem.getCurrentNum());
+                mEtTotalCount.setText(wifiTestItem.getCurrentNum() + "");
             }
-        } else if (stressValueBean.getBtBean() != null) {
+        } else if (stressValueItem.getBtBean() != null) {
             StringBuilder builder = new StringBuilder();
             switch (eventMessage.getCode()) {
                 case Constants.EVENT_STRESS.STRESS_BT_EABLE:
-                    stressValueBean.getBtBean().setEnable(stressValueBean.getBtBean().getEnable() + 1);
+                    stressValueItem.getBtBean().setEnableNum(stressValueItem.getBtBean().getEnableNum() + 1);
                     break;
                 case Constants.EVENT_STRESS.STRESS_BT_DISCOVERY:
-                    stressValueBean.getBtBean().setDiscovery(stressValueBean.getBtBean().getDiscovery() + 1);
+                    stressValueItem.getBtBean().setDiscoveryNum(stressValueItem.getBtBean().getDiscoveryNum() + 1);
                     break;
                 case Constants.EVENT_STRESS.STRESS_BT_BOND:
-                    stressValueBean.getBtBean().setBond(stressValueBean.getBtBean().getBond() + 1);
+                    stressValueItem.getBtBean().setBondNum(stressValueItem.getBtBean().getBondNum() + 1);
                     break;
                 case Constants.EVENT_STRESS.STRESS_BT_CONNECT:
-                    stressValueBean.getBtBean().setConnect(stressValueBean.getBtBean().getConnect() + 1);
+                    stressValueItem.getBtBean().setConnectNum(stressValueItem.getBtBean().getConnectNum() + 1);
                     break;
                 case Constants.EVENT_STRESS.STRESS_BT_PLAYING:
-                    stressValueBean.getBtBean().setPlay(stressValueBean.getBtBean().getPlay() + 1);
+                    stressValueItem.getBtBean().setPlayNum(stressValueItem.getBtBean().getPlayNum() + 1);
                     break;
                 case Constants.EVENT_STRESS.STRESS_BT_DISABLE:
-                    stressValueBean.getBtBean().setDisable(stressValueBean.getBtBean().getDisable() + 1);
+                    stressValueItem.getBtBean().setDisableNum(stressValueItem.getBtBean().getDisableNum() + 1);
                     break;
             }
 
-            builder.append("蓝牙开启：").append(stressValueBean.getBtBean().getEnable()).append("\n")
-                    .append("蓝牙搜索：").append(stressValueBean.getBtBean().getDiscovery()).append("\n")
-                    .append("蓝牙匹配设备：").append(stressValueBean.getBtBean().getBond()).append("\n")
-                    .append("蓝牙播放：").append(stressValueBean.getBtBean().getPlay()).append("\n")
-                    .append("蓝牙连接：").append(stressValueBean.getBtBean().getConnect()).append("\n")
-                    .append("蓝牙关闭：").append(stressValueBean.getBtBean().getDisable()).append("\n");
+            builder.append("蓝牙开启：").append(stressValueItem.getBtBean().getEnableNum()).append("\n")
+                    .append("蓝牙搜索：").append(stressValueItem.getBtBean().getDiscoveryNum()).append("\n")
+                    .append("蓝牙匹配设备：").append(stressValueItem.getBtBean().getBondNum()).append("\n")
+                    .append("蓝牙播放：").append(stressValueItem.getBtBean().getPlayNum()).append("\n")
+                    .append("蓝牙连接：").append(stressValueItem.getBtBean().getConnectNum()).append("\n")
+                    .append("蓝牙关闭：").append(stressValueItem.getBtBean().getDisableNum()).append("\n");
             tvErrror.setText(builder);
         }
 

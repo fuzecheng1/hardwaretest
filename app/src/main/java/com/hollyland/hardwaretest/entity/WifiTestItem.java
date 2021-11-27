@@ -1,6 +1,6 @@
 package com.hollyland.hardwaretest.entity;
 
-public class WifiTestBean {
+public class WifiTestItem {
 
     //启动数
     private int enableNum;

@@ -3,27 +3,24 @@ package com.hollyland.hardwaretest.task;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.os.storage.StorageManager;
 //import android.os.storage.VolumeInfo;
 import android.os.storage.VolumeInfo;
-import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
-import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.hollyland.hardwaretest.constants.Constants;
 import com.hollyland.hardwaretest.entity.EventMessage;
-import com.hollyland.hardwaretest.entity.ScreenTest;
-import com.hollyland.hardwaretest.entity.StressValueBean;
-import com.hollyland.hardwaretest.entity.WifiTestBean;
+import com.hollyland.hardwaretest.entity.ScreenTestItem;
+import com.hollyland.hardwaretest.entity.StressValueItem;
+import com.hollyland.hardwaretest.entity.WifiTestItem;
 import com.hollyland.hardwaretest.manager.A2DPManager;
 import com.hollyland.hardwaretest.manager.CustomStorageManager;
 import com.hollyland.hardwaretest.manager.MediaManager;
@@ -34,7 +31,6 @@ import com.hollyland.hardwaretest.utils.EventBusUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -45,7 +41,7 @@ public class StressTask extends ThreadUtils.Task<Void> {
 
     private Context context;
 
-    private StressValueBean stressValueBean;
+    private StressValueItem stressValueItem;
 
     private A2DPManager a2DPManager;
 
@@ -57,10 +53,10 @@ public class StressTask extends ThreadUtils.Task<Void> {
 
     private NetworkUtils.OnNetworkStatusChangedListener onNetworkStatusChangedListener;
 
-    public StressTask(StressValueBean stressValueBean, Context context) {
-        this.stressValueBean = stressValueBean;
+    public StressTask(StressValueItem stressValueItem, Context context) {
+        this.stressValueItem = stressValueItem;
         a2DPManager = A2DPManager.getInstance(context);
-        a2DPManager.setInverval(stressValueBean.getIntervalTime());
+        a2DPManager.setInverval(stressValueItem.getIntervalTime());
         mediaManager = MediaManager.getInstance(context);
         screenManager = ScreenManager.getScreenManagerInstance(context);
         this.context = context;
@@ -78,9 +74,9 @@ public class StressTask extends ThreadUtils.Task<Void> {
                 EventBusUtils.post(new EventMessage(Constants.EVENT.STRESS_CURRENT_TIME, time));
             }
         }).start();
-        switch (stressValueBean.getTestType()) {
-            case StressValueBean.BLUETOOTH_STRESS:
-                BluetoothDevice device = (BluetoothDevice) stressValueBean.getSpinnerBean().getData();
+        switch (stressValueItem.getTestType()) {
+            case StressValueItem.BLUETOOTH_STRESS:
+                BluetoothDevice device = (BluetoothDevice) stressValueItem.getSpinnerBean().getData();
                 mediaManager.startMedia("music.mp3");
                 a2DPManager.setTestBluetoothDevice(device);
                 a2DPManager.setStart(true);
@@ -104,9 +100,9 @@ public class StressTask extends ThreadUtils.Task<Void> {
                     a2DPManager.setStart(false);
                 }
                 break;
-            case StressValueBean.WIFI_STRESS:
+            case StressValueItem.WIFI_STRESS:
                 ToastUtils.showLong("Wifi 压力测试开始");
-                WifiTestBean wifiTestBean = new WifiTestBean();
+                WifiTestItem wifiTestItem = new WifiTestItem();
                 if (NetworkUtils.isWifiConnected()) {
                     NetworkUtils.setWifiEnabled(false);
                 }
@@ -114,23 +110,23 @@ public class StressTask extends ThreadUtils.Task<Void> {
                 wifiTimer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        wifiTask(wifiTestBean);
+                        wifiTask(wifiTestItem);
                     }
                 }, 2000);
                 break;
-            case StressValueBean.SCREEN_STRESS:
-                ScreenTest screenTest = new ScreenTest();
+            case StressValueItem.SCREEN_STRESS:
+                ScreenTestItem screenTestItem = new ScreenTestItem();
                 TimerTask sTask = new TimerTask() {
                     @Override
                     public void run() {
                         try {
                             screenManager.goToSleep();
-                            screenTest.setSleepSuccess(screenTest.getSleepSuccess() + 1);
+                            screenTestItem.setSleepSuccessNum(screenTestItem.getSleepSuccessNum() + 1);
                         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
                             e.printStackTrace();
-                            screenTest.setSleepError(screenTest.getSleepError() + 1);
+                            screenTestItem.setSleepErrorNum(screenTestItem.getSleepErrorNum() + 1);
                         }
-                        EventBusUtils.post(new EventMessage(Constants.EVENT.SCREEN_TEST_SLEEP, screenTest));
+                        EventBusUtils.post(new EventMessage(Constants.EVENT.SCREEN_TEST_SLEEP, screenTestItem));
                         Log.d(Constants.TAG, "run: goToSleep");
                     }
                 };
@@ -140,20 +136,20 @@ public class StressTask extends ThreadUtils.Task<Void> {
                     public void run() {
                         try {
                             screenManager.wakeUp();
-                            screenTest.setWakeUpSuccess(screenTest.getWakeUpSuccess() + 1);
+                            screenTestItem.setWakeUpSuccessNum(screenTestItem.getWakeUpSuccessNum() + 1);
                         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                             e.printStackTrace();
-                            screenTest.setWakeUpError(screenTest.getWakeUpError() + 1);
+                            screenTestItem.setWakeUpErrorNum(screenTestItem.getWakeUpErrorNum() + 1);
                         }
-                        EventBusUtils.post(new EventMessage(Constants.EVENT.SCREEN_TEST_WAKEUP, screenTest));
+                        EventBusUtils.post(new EventMessage(Constants.EVENT.SCREEN_TEST_WAKEUP, screenTestItem));
                         Log.d(Constants.TAG, "run: wakeUp");
                     }
                 };
                 screenTimer = new Timer();
-                int inverval = stressValueBean.getIntervalTime() * 1000;
+                int inverval = stressValueItem.getIntervalTime() * 1000;
                 Log.d(Constants.TAG, "inverval: " + inverval);
-                if (StringUtils.isNotBlank(stressValueBean.getData().toString())){
-                    String data = stressValueBean.getData().toString();
+                if (StringUtils.isNotBlank(stressValueItem.getData().toString())){
+                    String data = stressValueItem.getData().toString();
 //                    if (StringUtils.equals(Constants.ONOS_PACKAGE_NAME,data)){
 //                        AppUtils.launchApp(data);
 //                    }
@@ -168,7 +164,7 @@ public class StressTask extends ThreadUtils.Task<Void> {
                 screenTimer.schedule(sTask, 2000, 10 * 1000);
                 screenTimer.schedule(wTask, 2000 + inverval, 10 * 1000);
                 break;
-            case StressValueBean.USB_STRESS:
+            case StressValueItem.USB_STRESS:
                 @SuppressLint("WrongConstant") StorageManager storageManager = (StorageManager)context.getSystemService("storage");
                 if (storageManager == null){
                     EventBusUtils.post(new EventMessage(Constants.EVENT.EVENT_USB_STRESS_RESULT,"usb无数据"));
@@ -185,8 +181,8 @@ public class StressTask extends ThreadUtils.Task<Void> {
                             List<String> uuids = null;
 
                             CustomStorageManager customStorageManager = CustomStorageManager.getInstance(context);
-                            if (stressValueBean .getData() != null){
-                                uuids =  (List<String>) stressValueBean.getData();
+                            if (stressValueItem.getData() != null){
+                                uuids =  (List<String>) stressValueItem.getData();
                                 if (uuids.size() != 0){
                                     for (String uuid : uuids) {
                                         if (uuid == null){
@@ -216,7 +212,7 @@ public class StressTask extends ThreadUtils.Task<Void> {
                                                 Log.d(Constants.TAG, "STATE_CHECKING: "+uuid);
                                                 break;
                                         }
-                                        SystemClock.sleep(stressValueBean.getIntervalTime() * 1000);
+                                        SystemClock.sleep(stressValueItem.getIntervalTime() * 1000);
                                     }
                                 }
                             }
@@ -247,33 +243,33 @@ public class StressTask extends ThreadUtils.Task<Void> {
     }
 
 
-    public void wifiTask(WifiTestBean wifiTestBean) {
+    public void wifiTask(WifiTestItem wifiTestItem) {
         NetworkUtils.setWifiEnabled(true);
-        wifiTestBean.setEnableNum(wifiTestBean.getEnableNum() + 1);
+        wifiTestItem.setEnableNum(wifiTestItem.getEnableNum() + 1);
         if (onNetworkStatusChangedListener == null) {
             onNetworkStatusChangedListener = new NetworkUtils.OnNetworkStatusChangedListener() {
                 @Override
                 public void onDisconnected() {
                     ToastUtils.showLong("断开连接");
-                    wifiTestBean.setDisableNum(wifiTestBean.getDisableNum() + 1);
-                    EventBusUtils.post(new EventMessage(Constants.EVENT.EVENT_WIFI_STESS_RESULT, wifiTestBean));
+                    wifiTestItem.setDisableNum(wifiTestItem.getDisableNum() + 1);
+                    EventBusUtils.post(new EventMessage(Constants.EVENT.EVENT_WIFI_STESS_RESULT, wifiTestItem));
                     if (!isStop) {
                         new Handler().postDelayed(() -> {
-                            wifiTask(wifiTestBean);
+                            wifiTask(wifiTestItem);
                         }, 5000);
                     }
                 }
 
                 @Override
                 public void onConnected(NetworkUtils.NetworkType networkType) {
-                    wifiTestBean.setConnectedNum(wifiTestBean.getConnectedNum() + 1);
+                    wifiTestItem.setConnectedNum(wifiTestItem.getConnectedNum() + 1);
                     Log.d(Constants.TAG, "Network: 已经 onConnected");
                     if (networkType == NetworkUtils.NetworkType.NETWORK_WIFI) {
                         ToastUtils.showLong("已连接");
                         NetworkUtils.isAvailableByPingAsync(aBoolean -> {
                             if (aBoolean) {
                                 Log.d(Constants.TAG, "Network: 正常访问网络");
-                                wifiTestBean.setSufNetNum(wifiTestBean.getSufNetNum() + 1);
+                                wifiTestItem.setSufNetNum(wifiTestItem.getSufNetNum() + 1);
                                 NetworkUtils.setWifiEnabled(false);
                             } else {
                                 /*
@@ -286,7 +282,7 @@ public class StressTask extends ThreadUtils.Task<Void> {
                                        return;
                                     }
                                     Log.d(Constants.TAG, "Network: 首次访问网络失败");
-                                    wifiTestBean.setSufNetNum(wifiTestBean.getSufNetNum() + 1);
+                                    wifiTestItem.setSufNetNum(wifiTestItem.getSufNetNum() + 1);
                                     NetworkUtils.setWifiEnabled(false);
                                 }, 5000);
                             }
